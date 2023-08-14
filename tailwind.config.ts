@@ -1,3 +1,4 @@
+import daisyui from "daisyui";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -15,9 +16,9 @@ const config: Config = {
             },
             colors: {
                 cherry: "#FF0060",
-                yellow: "#F6FA70",
-                green: "#00DFA2",
-                blue: "#0079FF",
+                mango: "#F6FA70",
+                pine: "#00DFA2",
+                primary: "#0079FF",
             },
             fontFamily: {
                 sans: ["Inter var", "Inter", "system-ui", "sans-serif"],
@@ -26,6 +27,6 @@ const config: Config = {
             },
         },
     },
-    plugins: [],
+    plugins: [daisyui],
 };
 export default config;

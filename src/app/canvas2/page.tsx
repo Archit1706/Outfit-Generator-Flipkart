@@ -83,7 +83,7 @@ function DrawingCanvas() {
 
     return (
         <div>
-            <div className="bg-gradient-to-r from-blue-500 via-yellow-300 to-orange-500 p-8 text-white text-center">
+            <div className="bg-gradient-to-r from-primary-500 via-mango-300 to-orange-500 p-8 text-white text-center">
                 {/* File Upload */}
                 <input
                     type="file"
@@ -121,19 +121,19 @@ function DrawingCanvas() {
             />
 
             <button
-                className="bg-green text-cherry font-bold shadow-lg shadow-green/50 text-xl p-2 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
+                className="bg-pine text-cherry font-bold shadow-lg shadow-pine/50 text-xl p-2 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
                 onClick={clearCanvas}
             >
                 Clear
             </button>
             <button
-                className="bg-green text-cherry font-bold shadow-lg shadow-green/50 text-xl p-2 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
+                className="bg-pine text-cherry font-bold shadow-lg shadow-pine/50 text-xl p-2 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
                 onClick={sendImage}
             >
                 Send
             </button>
             <button
-                className="bg-green text-cherry font-bold shadow-lg shadow-green/50 text-xl p-2 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
+                className="bg-pine text-cherry font-bold shadow-lg shadow-pine/50 text-xl p-2 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
                 onClick={() =>
                     setCurrentTool(currentTool === "pen" ? "eraser" : "pen")
                 }

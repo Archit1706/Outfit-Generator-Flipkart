@@ -1,202 +1,235 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
-import React, {
-    useState,
-    useEffect,
-    useCallback,
-    useRef,
-    useContext,
-} from "react";
-import Webcam from "react-webcam";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { Link as LinkScroll } from "react-scroll";
 import Modal from "react-modal";
-import { redirect } from "next/navigation";
 import WebcamCapture from "../components/WebcamCapture";
 import { AiOutlineClose } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { fadeIn } from "../utils/fadein";
+import { BsFillCameraFill, BsFillImageFill } from "react-icons/bs";
 
-import { AppContext } from "../context/AppContext";
-const customStyles = {
-    content: {
-        top: "50%",
-        left: "50%",
-        right: "auto",
-        bottom: "auto",
-        marginRight: "-50%",
-        transform: "translate(-50%, -50%)",
-    },
-};
+import { FileUploader } from "react-drag-drop-files";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
-    // useEffect(() => {}, []);
-    const [modalIsOpen, setIsOpen] = useState(false);
+export default function Home(props: any) {
+    const router = useRouter();
+    const fileTypes = ["JPG", "PNG", "JPEG"];
+    const [modal1IsOpen, setIsOpen1] = useState(false);
+    const [modal2IsOpen, setIsOpen2] = useState(false);
+    const [fileImage, setFileImage] = useState(null);
+    const [file, setFile] = useState(null);
 
-    function openModal() {
-        setIsOpen(true);
-    }
+    const openModal1 = () => {
+        setIsOpen1(true);
+    };
 
-    function closeModal() {
-        setIsOpen(false);
-    }
+    const closeModal1 = () => {
+        setIsOpen1(false);
+    };
+
+    const openModal2 = () => {
+        setIsOpen2(true);
+    };
+
+    const closeModal2 = () => {
+        setIsOpen2(false);
+    };
+
+    const handleFileUpload = (event: any) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+                setFileImage(e.target.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    };
+    const handleChange = (file: any) => {
+        setFile(file);
+        // console.log(file.name, file.type, file.size);
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            var base64data: any = reader.result;
+            console.log(base64data);
+            localStorage.setItem("image2", base64data);
+        };
+        reader.readAsDataURL(file);
+        router.push("/canvas");
+    };
     return (
-        <section className="flex flex-col items-center md:flex-row my-24 md:my-0">
-            <motion.div
+        <>
+            <motion.section
                 variants={fadeIn("up", 0.3)}
                 initial="hidden"
                 whileInView={"show"}
-                viewport={{ once: false, amount: 0.5 }}
-                className="md:w-1/2"
+                viewport={{ once: false, amount: 0.4 }}
+                className="grid h-screen md:h-[calc(100vh-80px)] place-items-center place-content-center gap-8"
             >
-                {/* Heading */}
-                <div className="text-black">
-                    {/* <h1 className="text-4xl md:text-5xl font-bold text-center">
-                        Flip Bot
-                    </h1> */}
-                    {/* <p className="text-center text-xl md:text-2xl">
-                        Your Personal Fashion Assistant
-                    </p> */}
-
-                    {/* typing effect  */}
-                    <p className="text-center text-xl md:text-2xl text-blue shadow">
-                        {/* <Typewriter
-                            options={{
-                                strings: [ 
-                                    "Discover Your Style Revolution",
-                                    "Elevate Your Fashion Journey",
-                                    "Where Trends Meet Your Taste",
-                                    "Unveil Your Personalized Wardrobe",
-                                    "Empowering Your Unique Fashion Story",
-                                ],
-                                autoStart: true,
-                                loop: true,
-                            }}
-                        /> */}
-                    </p>
-                </div>
-
+                {/* heading line */}
+                <motion.div
+                    variants={fadeIn("up", 0.4)}
+                    initial="hidden"
+                    whileInView={"show"}
+                    viewport={{ once: false, amount: 0.4 }}
+                    className="w-full text-center text-4xl md:text-[65px] leading-none font-[900] tracking-tighter"
+                >
+                    <h1 className="text-black md:text-[min(10vw, 100px)] ">
+                        Empowering Your
+                    </h1>{" "}
+                    <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-600 via-yellow-500">
+                        Unique Fashion Story
+                    </h1>
+                </motion.div>
                 {/* buttons */}
-                <div className="flex justify-center items-center flex-col gap-8 ">
-                    {/* btn 1 */}
-                    <motion.div
-                        variants={fadeIn("up", 0.4)}
-                        initial="hidden"
-                        whileInView={"show"}
-                        viewport={{ once: false, amount: 0.5 }}
-                        className="bg-green text-cherry font-semibold shadow-lg shadow-green/50 text-xl p-6 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm"
-                        whileHover={{
-                            scale: 0.95,
-                            transition: { duration: 0.2 },
-                        }}
+                <motion.div
+                    variants={fadeIn("up", 0.5)}
+                    initial="hidden"
+                    whileInView={"show"}
+                    viewport={{ once: false, amount: 0.4 }}
+                    className="flex flex-col md:flex-row justify-center items-center w-full gap-4  md:w-auto"
+                >
+                    <Link
+                        href="/canvas"
+                        className="group border-none w-10/12 bg-white/60 shadow-gray-300 text-gray-700 p-2 h-[133px] rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 transition-all duration-200 cursor-pointer"
                     >
-                        <Link className="" href="/canvas">
-                            Start with Generated Image
-                        </Link>
-                        <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-                            Instant Style Magic: Explore AI-Generated Outfits
+                        <p className="group-hover:animate-bounce">
+                            <BsFillImageFill className="h-6 w-6" />
                         </p>
-                    </motion.div>
-                    {/* btn 2 */}
-                    <motion.div
-                        variants={fadeIn("up", 0.5)}
-                        initial="hidden"
-                        whileInView={"show"}
-                        viewport={{ once: false, amount: 0.5 }}
-                        className="bg-green text-cherry font-semibold shadow-lg shadow-green/50 text-xl p-6 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
-                        onClick={openModal}
-                        whileHover={{
-                            scale: 0.95,
-                            transition: { duration: 0.2 },
-                        }}
+                        {"Start with Generated Image"}
+                        <h3 className="text-sm font-medium tracking-wide text-gray-500">
+                            Instant Style Magic: Explore AI-Generated Outfits
+                        </h3>
+                    </Link>
+                    <LinkScroll
+                        to="image-upload"
+                        spy={true}
+                        smooth={true}
+                        className="group border-none w-10/12 bg-white/60 shadow-gray-300 text-gray-700 p-2 h-[133px] rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 transition-all duration-200 cursor-pointer"
+                        // onClick={openModal}
                     >
-                        <p className="">Start with Your Own Image</p>
-                        <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                        <p className="group-hover:animate-bounce">
+                            <BsFillCameraFill className="h-6 w-6" />
+                        </p>
+                        {"Start with Your Own Image"}
+                        <h3 className="text-sm font-medium tracking-wide text-gray-500">
                             Your Fashion, Your Way: Begin with Your Own
                             Inspiration
-                        </p>
-                    </motion.div>
-                    {/* user image capture modal */}
-                    <Modal
-                        ariaHideApp={false}
-                        className="relative aspect-square md:h-[512px] md:w-[512px] mx-auto my-auto"
-                        isOpen={modalIsOpen}
-                        onRequestClose={closeModal}
-                        // style={customStyles}
-                        contentLabel="Capture Your Image: "
+                        </h3>
+                    </LinkScroll>
+                </motion.div>
+            </motion.section>
+
+            {/* Two buttons one for image upload and one for capturing image through webcam the user can chose either of them to submit a photo */}
+            <section
+                id="image-upload"
+                className="h-screen flex flex-col justify-center items-center w-full gap-4 text-center"
+            >
+                <motion.h1
+                    variants={fadeIn("down", 0.3)}
+                    initial="hidden"
+                    whileInView={"show"}
+                    viewport={{ once: false, amount: 0.4 }}
+                    className="text-3xl font-bold text-black"
+                >
+                    Choose your pic to get started!
+                </motion.h1>
+                <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full">
+                    <motion.button
+                        variants={fadeIn("right", 0.3)}
+                        initial="hidden"
+                        whileInView={"show"}
+                        viewport={{ once: false, amount: 0.4 }}
+                        className="group border-none w-11/12 md:w-1/3 h-24 bg-white/60 shadow-gray-300 text-gray-700 p-2  rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 transition-all duration-200 cursor-pointer"
+                        onClick={openModal1}
                     >
-                        <div
-                            id="modal"
-                            className="border-[10px] border-blue p-2 rounded-md shadow-md shadow-blue/60  "
-                        >
-                            <WebcamCapture />
+                        <p className="group-hover:animate-bounce">
+                            <BsFillImageFill className="h-6 w-6" />
+                        </p>
+                        Upload from your device
+                    </motion.button>
+
+                    <motion.button
+                        variants={fadeIn("left", 0.3)}
+                        initial="hidden"
+                        whileInView={"show"}
+                        viewport={{ once: false, amount: 0.4 }}
+                        className="group border-none w-11/12 md:w-1/3 h-24 bg-white/60 shadow-gray-300 text-gray-700 p-2 rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 transition-all duration-200 cursor-pointer"
+                        onClick={openModal2}
+                    >
+                        <p className="group-hover:animate-bounce">
+                            <BsFillCameraFill className="h-6 w-6" />
+                        </p>
+                        Capture from your webcam
+                    </motion.button>
+                </div>
+
+                <Modal
+                    ariaHideApp={false}
+                    className="aspect-square w-screen md:h-[512px] md:w-[512px] md:mx-auto md:my-auto flex items-center justify-center"
+                    isOpen={modal1IsOpen}
+                    onRequestClose={closeModal1}
+                    contentLabel="Upload or Capture an Image"
+                >
+                    <motion.div
+                        variants={fadeIn("up", 0.3)}
+                        initial="hidden"
+                        whileInView={"show"}
+                        viewport={{ once: false, amount: 0.4 }}
+                        id="modal"
+                        className="w-full rounded-md bg-gradient-to-r from-sky-500 via-yellow-300 to-orange-300 p-1 shadow-lg shadow-gray-400 h-40 flex justify-center items-center"
+                    >
+                        <div className=" relative flex flex-col h-full w-full bg-white/50 items-center justify-center">
+                            <FileUploader
+                                handleChange={handleChange}
+                                name="file"
+                                types={fileTypes}
+                                label="Drag & Drop your files here"
+                                multiple={false}
+                                required={true}
+                                className="h-full w-full border-2 border-gray-300 border-dashed rounded-md"
+                            />
                             <div className="absolute top-2 right-2">
                                 <button
-                                    className="bg-green text-cherry font-bold shadow-lg shadow-green/50 text-xl p-2 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
-                                    onClick={closeModal}
+                                    className="border-none w-10/12 bg-white/60 shadow-gray-300 text-gray-600 p-2 rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 hover:text-black transition-all duration-200"
+                                    onClick={closeModal1}
                                 >
                                     <AiOutlineClose className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>
-                    </Modal>
-                </div>
-            </motion.div>
-
-            {/* Image */}
-            <motion.div
-                variants={fadeIn("down", 0.6)}
-                initial="hidden"
-                whileInView={"show"}
-                viewport={{ once: false, amount: 0.7 }}
-                className="md:w-1/2 hidden md:flex"
-            >
-                <Image
-                    src="/assets/img/img2.png"
-                    alt="hero"
-                    width={500}
-                    height={500}
-                />
-            </motion.div>
-        </section>
+                    </motion.div>
+                </Modal>
+                <Modal
+                    ariaHideApp={false}
+                    className="relative aspect-square w-screen md:h-[512px] md:w-[512px] md:mx-auto md:my-auto "
+                    isOpen={modal2IsOpen}
+                    onRequestClose={closeModal2}
+                    contentLabel="Capture an Image"
+                >
+                    <motion.div
+                        variants={fadeIn("up", 0.4)}
+                        initial="hidden"
+                        whileInView={"show"}
+                        viewport={{ once: false, amount: 0.4 }}
+                        id="modal"
+                        className="w-full rounded-md bg-gradient-to-r from-sky-500 via-yellow-300 to-orange-300 p-1 shadow-lg shadow-gray-400"
+                    >
+                        <div className="flex flex-col h-full w-full bg-white/50 items-center justify-center">
+                            <WebcamCapture />
+                            <div className="absolute top-2 right-2">
+                                <button
+                                    className="border-none w-10/12 bg-white/60 shadow-gray-300 text-gray-600 p-2 rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 hover:text-black transition-all duration-200"
+                                    onClick={closeModal2}
+                                >
+                                    <AiOutlineClose className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                </Modal>
+            </section>
+        </>
     );
 }
-
-const videoConstraints = {
-    width: 512,
-    height: 512,
-    facingMode: "user",
-};
-
-// const WebcamCapture = () => {
-//     const { image, setImage } = useContext(AppContext);
-
-//     const webcamRef = useRef(null);
-//     const capture = useCallback(() => {
-//         const imageSrc = webcamRef.current.getScreenshot();
-//         setImage(imageSrc);
-//         console.table(imageSrc);
-//         // redirect("/canvas");
-//         // window.location.href = "/canvas";
-//     }, [webcamRef]);
-//     return (
-//         <>
-//             <Webcam
-//                 audio={false}
-//                 height={720}
-//                 ref={webcamRef}
-//                 screenshotFormat="image/jpeg"
-//                 width={1280}
-//                 videoConstraints={videoConstraints}
-//             />
-//             <div className="flex justify-around items-center flex-row">
-//                 <button
-//                     className="bg-green text-cherry font-normal shadow-lg shadow-green/50 text-xl p-6 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm "
-//                     onClick={capture}
-//                 >
-//                     Capture photo
-//                 </button>
-//             </div>
-//         </>
-//     );
-// };

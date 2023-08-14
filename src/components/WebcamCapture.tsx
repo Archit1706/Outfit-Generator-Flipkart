@@ -13,19 +13,31 @@ const videoConstraints = {
 
 const WebcamCapture = () => {
     const router = useRouter();
-    const { image, setImage } = useContext(AppContext);
+    // const { image, setImage } = useContext(AppContext);
 
     const webcamRef = useRef(null);
     const capture = useCallback(
-        (e) => {
+        (e: any) => {
             e.preventDefault();
             const imageSrc = webcamRef.current.getScreenshot();
-            setImage(imageSrc);
+            // setImage(imageSrc);
             console.table(imageSrc);
-            // setTimeout(() => {}, 6000);
-            // router.push("/canvas");
-            // redirect("/canvas");
-            // window.location.href = "/canvas";
+            localStorage.setItem("image", imageSrc);
+            fetch("/api/canvas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    image: imageSrc,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    router.push("/canvas");
+                })
+                .catch((err) => console.log(err));
         },
         [webcamRef]
     );
@@ -39,14 +51,14 @@ const WebcamCapture = () => {
                 width={1280}
                 videoConstraints={videoConstraints}
             />
-            <div className="flex justify-around items-center flex-row text-center">
+            <div className="flex justify-around items-center flex-row text-center my-2">
                 <button
-                    className="group bg-green text-cherry font-normal shadow-lg shadow-green/50 text-xl p-6 cursor-pointer hover:text-cherry/90 hover:scale-95 transition-all duration-200 rounded-md min-w-sm  "
+                    className="group border-none w-fit bg-white/90 shadow-gray-300 text-gray-600 p-2 rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 hover:text-black transition-all duration-200"
                     onClick={capture}
                 >
-                    <p className="flex justify-center items-center text-center flex-row gap-4">
-                        <AiFillCamera className="font-bold group-hover:animate-pulse  h-6 w-6" />
-                        <span>Capture photo</span>
+                    <p className="flex justify-center items-center text-center flex-row gap-2">
+                        <AiFillCamera className="font-bold group-hover:animate-pulse h-6 w-6" />
+                        <span>Capture</span>
                     </p>
                 </button>
             </div>
