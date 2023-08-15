@@ -368,6 +368,8 @@ const page = () => {
     const height = 512;
     let userImage = "";
 
+    const [keywords, setKeywords] = useState([]); //array of keywords from backend
+    const [llmResponse, setLLMResponse] = useState([]); //array of responses from backend
     const [previousResponses, setPreviousResponses] = useState([]); //array of responses from backend
     const [responses, setResponses] = useState([
         // "https://dummyimage.com/512x512",
@@ -442,7 +444,54 @@ const page = () => {
             return;
         }
         if (dataURL === blank) {
-            toast.error("LLM");
+            // toast.error("LLM");
+            fetch(`${ngrok}/api/llama/prompt`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    gender: "man",
+                    prompt: outfitPrompt,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    setLLMResponse(data.response);
+                    for (
+                        let i = 0;
+                        i < Math.min(4, data.response.length);
+                        i++
+                    ) {
+                        fetch(`${ngrok}/api/sdapi/txt2img`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                gender: "man",
+                                prompt: data.response[i],
+                                keywords: data.keywords,
+                            }),
+                        })
+                            .then((res) => res.json())
+                            .then((data) => {
+                                console.log(data);
+                                setResponses((responses) => [
+                                    ...responses,
+                                    data.response[0],
+                                ]);
+                                return data;
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         } else {
             try {
                 console.table([dataURL, imgURL, outfitPrompt]);
