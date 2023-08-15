@@ -22,7 +22,7 @@ const WebcamCapture = () => {
             // localStorage.setItem("image", imageSrc);
             // const data = fetch(`${ngrok}/api/sdapi/resize`, {
             const data = fetch(
-                `${process.env.NEXT_PUBLIC_NGROK_URL}/api/sdapi/resize`,
+                `${localStorage.getItem("ngrok")}/api/sdapi/resize`,
                 {
                     method: "POST",
                     headers: {

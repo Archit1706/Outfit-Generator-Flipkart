@@ -55,25 +55,26 @@ export default function Home(props: any) {
         reader.onloadend = function () {
             base64data = reader.result;
             console.log(base64data);
-            localStorage.setItem("image", base64data);
+            // localStorage.setItem("image", base64data);
+            fetch(`${localStorage.getItem("ngrok")}/api/sdapi/resize`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    image: base64data,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data.response[0]);
+                    localStorage.setItem("image", data.response[0].toString());
+                    router.push("/canvas");
+                })
+                .catch((err) => console.log(err));
         };
         reader.readAsDataURL(file);
-        const data = fetch(`${localStorage.getItem('ngrok')}/api/sdapi/resize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                image: base64data,
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data.response[0]);
-                // localStorage.setItem("image", data.response[0].toString());
-                router.push("/canvas");
-            })
-            .catch((err) => console.log(err));
+
         router.push("/canvas");
     };
     useEffect(() => {
@@ -87,16 +88,16 @@ export default function Home(props: any) {
             .catch((err) => {
                 console.log(err);
             });
-    },[]);
+    }, []);
 
     const generateImage = () => {
-        fetch(`${localStorage.getItem('ngrok')}/api/sdapi/txt2img`, {
+        fetch(`${localStorage.getItem("ngrok")}/api/sdapi/txt2img`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                gender: localStorage.getItem('gender'),
+                gender: localStorage.getItem("gender"),
                 prompt: "Plain White Shirt",
                 keywords: "",
             }),

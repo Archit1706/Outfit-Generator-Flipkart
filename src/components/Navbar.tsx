@@ -53,7 +53,7 @@ const Navbar = (props: Props) => {
             <div className="flex flex-row justify-center items-center gap-2">
                 {/* man-woman toggle */}
                 <div className="">
-                    <label className="swap swap-flip text-2xl">
+                    <label className="swap swap-flip text-4xl pt-1">
                         {/* this hidden checkbox controls the state */}
                         <input
                             type="checkbox"
@@ -77,38 +77,26 @@ const Navbar = (props: Props) => {
                     </label>
                 </div>
 
-                <SignedOut>
+                <img
+                    alt="..."
+                    className="w-12 rounded-full align-middle border-none shadow-lg"
+                    src={`https://avatars.dicebear.com/api/initials/Archit Rathod.svg`}
+                />
+
+                {/* <SignedOut>
                     <div className="bg-black text-white hover:text-gray-200 p-2 px-4 rounded-full shadow-md hover:scale-95 transition-all duration-200 cursor-pointer text-md md:text-md md:font-semibold font-normal">
                         <Link className="" href="/sign-in">
                             Sign-In
                         </Link>
                     </div>
-                </SignedOut>
+                </SignedOut> */}
 
-                <SignedIn>
+                {/* <SignedIn>
                     <div className="">
                         <UserButton />
                     </div>
-                    {/* <SignOutButton /> */}
-                    {/* <SignOutButton
-                                    signOutCallback={() =>
-                                        router.push("/sign-in")
-                                    }
-                                >
-                                    <div className="flex cursor-pointer gap-4 p-4">
-                                        <Image
-                                            src="/assets/logout.svg"
-                                            alt="logout"
-                                            width={24}
-                                            height={24}
-                                        />
-
-                                        <p className="text-white max-lg:hidden">
-                                            Logout
-                                        </p>
-                                    </div>
-                                </SignOutButton> */}
-                </SignedIn>
+                    
+                </SignedIn> */}
             </div>
         </nav>
     );
