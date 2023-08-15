@@ -7,6 +7,8 @@ import type { Metadata } from "next";
 import React from "react";
 import { Ubuntu } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ubuntu = Ubuntu({
     subsets: ["latin"],
@@ -33,6 +35,18 @@ export default function RootLayout({
                     className={`${ubuntu.className} min-h-screen bg-gradient-to-bl to-[#F8E831] from-[#047BD5] overflow-x-hidden`}
                 >
                     <div className="h-full min-h-screen w-full bg-white/50">
+                        <ToastContainer
+                            position="bottom-center"
+                            autoClose={3000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="light"
+                        />
                         <Navbar />
                         <AppProvider>{children}</AppProvider>
                     </div>

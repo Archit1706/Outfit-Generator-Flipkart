@@ -19,6 +19,7 @@ export default function Home(props: any) {
     const [modal2IsOpen, setIsOpen2] = useState(false);
     const [fileImage, setFileImage] = useState(null);
     const [file, setFile] = useState(null);
+    const [ngrok, setNgrok] = useState("");
 
     const openModal1 = () => {
         setIsOpen1(true);
@@ -56,8 +57,22 @@ export default function Home(props: any) {
             localStorage.setItem("image2", base64data);
         };
         reader.readAsDataURL(file);
+        // fetch();
         router.push("/canvas");
     };
+    useEffect(() => {
+        fetch("https://server.sidd065.repl.co/backend")
+            .then((res) => res.json())
+            .then((data) => {
+                setNgrok(data.url);
+                localStorage.setItem("ngrok", data.url);
+                return;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+
     return (
         <>
             <motion.section
@@ -72,7 +87,7 @@ export default function Home(props: any) {
                     variants={fadeIn("up", 0.4)}
                     initial="hidden"
                     whileInView={"show"}
-                    viewport={{ once: false, amount: 0.4 }}
+                    viewport={{ once: true, amount: 0.4 }}
                     className="w-full text-center text-4xl md:text-[65px] leading-none font-[900] tracking-tighter"
                 >
                     <h1 className="text-black md:text-[min(10vw, 100px)] ">
@@ -87,7 +102,7 @@ export default function Home(props: any) {
                     variants={fadeIn("up", 0.5)}
                     initial="hidden"
                     whileInView={"show"}
-                    viewport={{ once: false, amount: 0.4 }}
+                    viewport={{ once: true, amount: 0.4 }}
                     className="flex flex-col md:flex-row justify-center items-center w-full gap-4  md:w-auto"
                 >
                     <Link

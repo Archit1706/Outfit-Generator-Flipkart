@@ -12,7 +12,7 @@ type Props = {};
 const Navbar = (props: Props) => {
     const [gender, setGender] = useState<any>(
         typeof window !== "undefined" && localStorage?.getItem("gender")
-            ? localStorage.getItem("gender")
+            ? localStorage?.getItem("gender")
             : "male"
     );
 
@@ -50,7 +50,7 @@ const Navbar = (props: Props) => {
             </div>
 
             {/* login */}
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center gap-2">
                 {/* male-female toggle */}
                 <div className="">
                     <label className="swap swap-flip text-2xl">
@@ -78,7 +78,7 @@ const Navbar = (props: Props) => {
                 </div>
 
                 <SignedOut>
-                    <div className="bg-black text-white hover:text-gray-200 p-2 px-4 m-4 rounded-full shadow-md hover:scale-95 transition-all duration-200 cursor-pointer text-md md:text-md md:font-semibold font-normal">
+                    <div className="bg-black text-white hover:text-gray-200 p-2 px-4 rounded-full shadow-md hover:scale-95 transition-all duration-200 cursor-pointer text-md md:text-md md:font-semibold font-normal">
                         <Link className="" href="/sign-in">
                             Sign-In
                         </Link>
