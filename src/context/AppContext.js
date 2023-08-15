@@ -6,6 +6,7 @@ export const AppContext = createContext();
 const AppProvider = ({ children }) => {
     const [image, setImage] = useState("");
 
+
     useEffect(() => {
         console.log(new Date().getDate(), image);
     }, [image])

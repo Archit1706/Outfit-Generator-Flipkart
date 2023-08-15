@@ -51,13 +51,29 @@ export default function Home(props: any) {
         setFile(file);
         // console.log(file.name, file.type, file.size);
         var reader = new FileReader();
+        let base64data;
         reader.onloadend = function () {
-            var base64data: any = reader.result;
+            base64data = reader.result;
             console.log(base64data);
-            localStorage.setItem("image2", base64data);
+            localStorage.setItem("image", base64data);
         };
         reader.readAsDataURL(file);
-        // fetch();
+        const data = fetch(`${process.env.NGROK_URL}/api/sdapi/resize`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                image: base64data,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data.response[0]);
+                // localStorage.setItem("image", data.response[0].toString());
+                router.push("/canvas");
+            })
+            .catch((err) => console.log(err));
         router.push("/canvas");
     };
     useEffect(() => {
@@ -72,6 +88,28 @@ export default function Home(props: any) {
                 console.log(err);
             });
     });
+
+    const generateImage = () => {
+        fetch(`${process.env.NEXT_PUBLIC_NGROK_URL}/api/sdapi/txt2img`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                gender: "man",
+                prompt: "Plain White Shirt",
+                keywords: "",
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                localStorage.setItem("image", data.response[0].toString());
+                router.push("/canvas");
+                return data.response;
+            })
+            .catch((err) => console.log(err));
+    };
 
     return (
         <>
@@ -105,8 +143,8 @@ export default function Home(props: any) {
                     viewport={{ once: true, amount: 0.4 }}
                     className="flex flex-col md:flex-row justify-center items-center w-full gap-4  md:w-auto"
                 >
-                    <Link
-                        href="/canvas"
+                    <button
+                        onClick={generateImage}
                         className="group border-none w-10/12 bg-white/60 shadow-gray-300 text-gray-700 p-2 h-[133px] rounded-md text-center flex justify-center items-center flex-col hover:shadow-md text-xl tracking-tight font-semibold hover:scale-105 transition-all duration-200 cursor-pointer"
                     >
                         <p className="group-hover:animate-bounce">
@@ -116,7 +154,7 @@ export default function Home(props: any) {
                         <h3 className="text-sm font-medium tracking-wide text-gray-500">
                             Instant Style Magic: Explore AI-Generated Outfits
                         </h3>
-                    </Link>
+                    </button>
                     <LinkScroll
                         to="image-upload"
                         spy={true}

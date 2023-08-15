@@ -2,7 +2,7 @@
 
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs/app-beta";
-import AppProvider from "../context/AppContext";
+// import AppProvider from "../context/AppContext";
 import type { Metadata } from "next";
 import React from "react";
 import { Ubuntu } from "next/font/google";
@@ -48,7 +48,7 @@ export default function RootLayout({
                             theme="light"
                         />
                         <Navbar />
-                        <AppProvider>{children}</AppProvider>
+                        {children}
                     </div>
                 </body>
             </html>
