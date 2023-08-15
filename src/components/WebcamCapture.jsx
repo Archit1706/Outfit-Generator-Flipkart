@@ -1,6 +1,6 @@
 "use client";
 import Webcam from "react-webcam";
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { AiFillCamera } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 
@@ -15,7 +15,7 @@ const WebcamCapture = () => {
     const [ngrok, setNgrok] = useState("");
     const webcamRef = useRef(null);
     const capture = useCallback(
-        (e: any) => {
+        (e) => {
             const imageSrc = webcamRef.current.getScreenshot();
             // setImage(imageSrc);
             console.table(imageSrc);

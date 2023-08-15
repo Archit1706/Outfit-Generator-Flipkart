@@ -28,7 +28,8 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "src/app/canvas/page.jsx"
+        "src/app/canvas/page.jsx",
+        "src/components/WebcamCapture.jsx"
     ],
     "exclude": ["node_modules"]
 }
