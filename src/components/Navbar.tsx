@@ -3,9 +3,6 @@ import React, { useState, useEffect } from "react";
 import { SignedIn, SignOutButton, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
-import { FaMale, FaFemale } from "react-icons/fa";
-import { motion } from "framer-motion";
-import { fadeIn } from "@/utils/fadein";
 
 type Props = {};
 
@@ -31,7 +28,7 @@ const Navbar = (props: Props) => {
     return (
         <nav className="w-full h-20 bg-black/5 flex flex-row justify-between items-center p-4 md:px-6 ">
             {/* heading */}
-            <div className="flex flex-row justify-start items-center">
+            <Link href="/" className="flex flex-row justify-start items-center">
                 {/* logo */}
                 {/* <div className="h-10 w-10 bg-inherit rounded-full p-2 ">
                     <Image
@@ -47,7 +44,7 @@ const Navbar = (props: Props) => {
                         Bot
                     </span>
                 </h1>
-            </div>
+            </Link>
 
             {/* login */}
             <div className="flex flex-row justify-center items-center gap-2">

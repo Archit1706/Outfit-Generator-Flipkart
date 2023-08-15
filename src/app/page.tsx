@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import { Link as LinkScroll } from "react-scroll";
 import Modal from "react-modal";
 import WebcamCapture from "../components/WebcamCapture";

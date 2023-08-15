@@ -372,6 +372,7 @@ const page = () => {
                                     backgroundSize: `${width}px ${height}px`,
                                     backgroundRepeat: "no-repeat",
                                 }}
+                                className="cursor-crosshair"
                                 // className="border-2 border-primary shadow-md shadow-primary/50 aspect-square md:h-[512px] md:w-[512px]"
                             />
                         </motion.div>
@@ -541,26 +542,29 @@ const page = () => {
                 {/* chat/api response */}
                 {Array.isArray(llmResponse) && llmResponse.length > 0 && (
                     <div className="w-full rounded-xl bg-white/60 hover:bg-white/70 shadow-gray-300 shadow-lg relative text-gray-700 p-4 ">
-                        <div className="grid grid-cols-4 gap-4 p-2">
+                        <div className="grid grid-cols-2 gap-4">
                             {llmResponse.map((response, index) => (
-                                <>
+                                <div
+                                    key={index}
+                                    className="flex justif-center flex-row  bg-white/60 hover:bg-white/70 rounded-xl shadow-gray-300 shadow-lg gap-4 p-2"
+                                >
                                     <img
                                         src={
                                             llmImages[index] ||
                                             "https://dummyimage.com/512x512"
                                         }
                                         alt="response"
-                                        className="object-cover rounded-xl"
+                                        className="object-cover rounded-xl cursor-pointer"
                                         onClick={selectImage}
                                         style={{
                                             width: "128px",
                                             height: "128px",
                                         }}
                                     />
-                                    <p className="font-medium text-xl ">
+                                    <p className="font-semibold text-lg tracking-tight">
                                         {response}
                                     </p>
-                                </>
+                                </div>
                             ))}
                         </div>
                     </div>
