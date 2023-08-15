@@ -505,6 +505,7 @@ const page = () => {
         } else {
             try {
                 console.table([dataURL, imgURL, outfitPrompt]);
+                setResponses([loadingGif, loadingGif, loadingGif, loadingGif])
                 fetch(`${localStorage.getItem('ngrok')}/api/sdapi/img2img`, {
                     method: "POST",
                     headers: {
@@ -519,7 +520,7 @@ const page = () => {
                     .then((res) => res.json())
                     .then((data) => {
                         console.log(data);
-                        setLLMResponse([]);
+                        //setLLMResponse([]);
                         setResponses(data.response);
                         return data;
                     })
