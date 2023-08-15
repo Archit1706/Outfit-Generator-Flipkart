@@ -355,7 +355,7 @@ const page = () => {
             ? localStorage.getItem("image")
             : ""
     );
-    const [ngrok, setNgrok] = useState("");
+    // const [ngrok, setNgrok] = useState("");
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -363,14 +363,19 @@ const page = () => {
     const [outfitPrompt, setOutfitPrompt] = useState("");
     // const imgURL =
     //     "https://cdn6.dissolve.com/p/D1028_55_728/D1028_55_728_1200.jpg"; //SENT BY BACKEND
-    const [penSize, setPenSize] = useState(15);
+    const [penSize, setPenSize] = useState(30);
     const width = 512;
     const height = 512;
     let userImage = "";
-
-    const [keywords, setKeywords] = useState([]); //array of keywords from backend
-    const [llmResponse, setLLMResponse] = useState([]); //array of responses from backend
+    
+    const loadingGif = 'https://i.pinimg.com/originals/c7/e1/b7/c7e1b7b5753737039e1bdbda578132b8.gif'
+    const [prevousImgURL, setpreviousImgURL] = useState("");
+    const [keywords, setKeywords] = useState("");
+    const [mask, setMask] = useState("");
+    const [llmResponse, setLLMResponse] = useState(['123', '234', '345', '567']); //ARCHIT set this to [] after fixing tailwind
+    const [llmImages, setLLMImages] = useState([loadingGif, loadingGif, loadingGif, loadingGif])
     const [previousResponses, setPreviousResponses] = useState([]); //array of responses from backend
+    const [_, update] = useState(0);
     const [responses, setResponses] = useState([
         // "https://dummyimage.com/512x512",
         // "https://dummyimage.com/512x512",
@@ -385,24 +390,24 @@ const page = () => {
             context.scale(1, 1);
             context.lineCap = "round";
             context.strokeStyle = "black";
-            context.lineWidth = penSize; //WE CAN ADD A SLIDER TO CONTROL WIDTH OF BLACK LINE IF NEEDED.
+            context.lineWidth = penSize;
             contextRef.current = context;
         }
-    }, [penSize]);
+    }, [penSize, imgURL]);
 
-    useEffect(() => {
-        fetch("https://server.sidd065.repl.co/backend")
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data);
-                setNgrok(data.url);
-                // localStorage.setItem("ngrok", data.url);
-                return;
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
+    // useEffect(() => {
+    //     fetch("https://server.sidd065.repl.co/backend")
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             console.log(data);
+    //             setNgrok(data.url);
+    //             // localStorage.setItem("ngrok", data.url);
+    //             return;
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // });
 
     const startDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
@@ -443,15 +448,16 @@ const page = () => {
             toast.error("Please enter a prompt");
             return;
         }
+        setpreviousImgURL(imgURL);
         if (dataURL === blank) {
             // toast.error("LLM");
-            fetch(`${ngrok}/api/llama/prompt`, {
+            fetch(`${localStorage.getItem('ngrok')}/api/llama/prompt`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    gender: "man",
+                    gender: localStorage.getItem("gender"),
                     prompt: outfitPrompt,
                 }),
             })
@@ -459,18 +465,19 @@ const page = () => {
                 .then((data) => {
                     console.log(data);
                     setLLMResponse(data.response);
+                    setLLMImages([loadingGif, loadingGif, loadingGif, loadingGif]);
                     for (
                         let i = 0;
                         i < Math.min(4, data.response.length);
                         i++
                     ) {
-                        fetch(`${ngrok}/api/sdapi/txt2img`, {
+                        fetch(`${localStorage.getItem('ngrok')}/api/sdapi/txt2img`, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
                             },
                             body: JSON.stringify({
-                                gender: "man",
+                                gender: localStorage.getItem("gender"),
                                 prompt: data.response[i],
                                 keywords: data.keywords,
                             }),
@@ -478,10 +485,13 @@ const page = () => {
                             .then((res) => res.json())
                             .then((data) => {
                                 console.log(data);
-                                setResponses((responses) => [
-                                    ...responses,
-                                    data.response[0],
-                                ]);
+                                // setResponses((responses) => [
+                                //     ...responses,
+                                //     data.response[0],
+                                // ]);
+                                llmImages[i] = data.response[0];
+                                setLLMImages(llmImages);
+                                update(Math.random())
                                 return data;
                             })
                             .catch((err) => {
@@ -495,8 +505,7 @@ const page = () => {
         } else {
             try {
                 console.table([dataURL, imgURL, outfitPrompt]);
-
-                fetch(`${ngrok}/api/sdapi/img2img`, {
+                fetch(`${localStorage.getItem('ngrok')}/api/sdapi/img2img`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -510,6 +519,7 @@ const page = () => {
                     .then((res) => res.json())
                     .then((data) => {
                         console.log(data);
+                        setLLMResponse([]);
                         setResponses(data.response);
                         return data;
                     })
@@ -529,7 +539,7 @@ const page = () => {
         //send outfitPrompt to google search
 
         try {
-            fetch(`${ngrok}/api/sdapi/upscale`, {
+            fetch(`${localStorage.getItem('ngrok')}/api/sdapi/upscale`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -568,6 +578,17 @@ const page = () => {
         // window.location.reload();
     };
 
+    const showPreviousResponses = () => {
+        if (responses.length === 0 && previousResponses.length > 0) {
+            setResponses(previousResponses);
+            setPreviousResponses([]);
+        } else {
+            localStorage.setItem("image", prevousImgURL);
+            setImgURL(prevousImgURL);
+            setResponses([]);
+        }
+    };
+
     return (
         <section className="flex justify-center items-center min-h-screen h-auto md:items-start flex-col md:flex-row p-4 gap-4">
             {/* canvas with bg-image as the user image */}
@@ -575,7 +596,7 @@ const page = () => {
                 <h3 className="text-md font-medium text-gray-400">
                     Draw on the canvas as per your preference
                 </h3>
-
+                <button onClick={showPreviousResponses}>Back</button>
                 {Array.isArray(responses) && responses.length > 0 ? (
                     <div className="w-full rounded-xl bg-white/60 hover:bg-white/70 shadow-gray-300 shadow-lg p-4 text-gray-200 text-center">
                         <div className="grid grid-cols-2 gap-4">
@@ -723,8 +744,8 @@ const page = () => {
                         >
                             <input
                                 type="range"
-                                min={15}
-                                max={40}
+                                min={30}
+                                max={50}
                                 value={penSize}
                                 step={5}
                                 className="range range-xs w-11/12 bg-transparent/20"
@@ -741,10 +762,17 @@ const page = () => {
                 </div>
 
                 {/* chat/api response */}
-                {Array.isArray(responses) && responses.length > 0 && (
-                    <div className="w-full rounded-xl bg-white/60 hover:bg-white/70 shadow-gray-300 shadow-lg p-4 text-gray-200 relative min-w-80 max-w-3xl">
-                        {}
-                    </div>
+                {Array.isArray(llmResponse) && llmResponse.length > 0 &&(
+                    <div className="w-full rounded-xl bg-white/60 hover:bg-white/70 shadow-gray-300 shadow-lg p-4 text-gray-200 relative min-w-80 max-w-3xl text-gray-700 p-2 rounded-md">
+                        <div className="grid grid-cols-4 gap-2">
+                        {llmResponse.map((response, index) => (<><img
+                                        src={llmImages[index] || "https://dummyimage.com/512x512"}
+                                        alt="response"
+                                        className="object-cover rounded-xl"
+                                        onClick={selectImage}
+                                        style={{width: "128px", height: "128px"}}
+                                    />{response}</>))}
+                    </div></div>
                 )}
 
                 {/* prompt / search bar */}

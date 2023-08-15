@@ -58,7 +58,7 @@ export default function Home(props: any) {
             localStorage.setItem("image", base64data);
         };
         reader.readAsDataURL(file);
-        const data = fetch(`${process.env.NGROK_URL}/api/sdapi/resize`, {
+        const data = fetch(`${localStorage.getItem('ngrok')}/api/sdapi/resize`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -87,16 +87,16 @@ export default function Home(props: any) {
             .catch((err) => {
                 console.log(err);
             });
-    });
+    },[]);
 
     const generateImage = () => {
-        fetch(`${process.env.NEXT_PUBLIC_NGROK_URL}/api/sdapi/txt2img`, {
+        fetch(`${localStorage.getItem('ngrok')}/api/sdapi/txt2img`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                gender: "man",
+                gender: localStorage.getItem('gender'),
                 prompt: "Plain White Shirt",
                 keywords: "",
             }),

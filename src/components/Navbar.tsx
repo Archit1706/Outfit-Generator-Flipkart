@@ -13,7 +13,7 @@ const Navbar = (props: Props) => {
     const [gender, setGender] = useState<any>(
         typeof window !== "undefined" && localStorage?.getItem("gender")
             ? localStorage?.getItem("gender")
-            : "male"
+            : "man"
     );
 
     useEffect(() => {
@@ -23,9 +23,9 @@ const Navbar = (props: Props) => {
 
     const handleToggle = (e: any) => {
         if (e.target.checked) {
-            setGender("female");
+            setGender("woman");
         } else {
-            setGender("male");
+            setGender("man");
         }
     };
     return (
@@ -51,7 +51,7 @@ const Navbar = (props: Props) => {
 
             {/* login */}
             <div className="flex flex-row justify-center items-center gap-2">
-                {/* male-female toggle */}
+                {/* man-woman toggle */}
                 <div className="">
                     <label className="swap swap-flip text-2xl">
                         {/* this hidden checkbox controls the state */}
@@ -59,20 +59,20 @@ const Navbar = (props: Props) => {
                             type="checkbox"
                             onClick={handleToggle}
                             // onChange={() => {}}
-                            defaultChecked={gender === "male" ? false : true}
+                            defaultChecked={gender === "man" ? false : true}
                         />
 
                         <div
                             className="swap-on tooltip tooltip-left"
                             data-tip="Click to Change Gender"
                         >
-                            👨🏻
+                            👩🏻
                         </div>
                         <div
                             className="swap-off tooltip tooltip-left"
                             data-tip="Click to change gender"
                         >
-                            👩🏻
+                            👨🏻
                         </div>
                     </label>
                 </div>
