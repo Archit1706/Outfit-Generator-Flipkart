@@ -33,17 +33,11 @@ const page = () => {
     const height = 512;
     let userImage = "";
 
-    const loadingGif =
-        "https://i.pinimg.com/originals/c7/e1/b7/c7e1b7b5753737039e1bdbda578132b8.gif";
+    const loadingGif = "https://i.ibb.co/1bTL1b6/loadinggif.gif";
     const [prevousImgURL, setpreviousImgURL] = useState("");
     const [keywords, setKeywords] = useState("");
     const [mask, setMask] = useState("");
-    const [llmResponse, setLLMResponse] = useState([
-        "12fdasf fas fdsa fasda3",
-        "23 fasd fasd4",
-        "34 fasd fa fds sdf 5",
-        "56 fasd fsad7",
-    ]); //ARCHIT set this to [] after fixing tailwind
+    const [llmResponse, setLLMResponse] = useState([]); 
     const [llmImages, setLLMImages] = useState([
         loadingGif,
         loadingGif,
@@ -79,28 +73,28 @@ const page = () => {
         }
     }, [penSize, imgURL]);
 
-    useEffect(() => {
-        if (responses.length == 0) {
-            fetch(`${localStorage.getItem("ngrok")}/api/sdapi/caption`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    image: imgURL,
-                }),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                    setHashtags(data.response);
-                    return;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    }, [responses]);
+    // useEffect(() => {
+    //     if (responses.length == 0) {
+    //         fetch(`${localStorage.getItem("ngrok")}/api/sdapi/caption`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify({
+    //                 image: imgURL,
+    //             }),
+    //         })
+    //             .then((res) => res.json())
+    //             .then((data) => {
+    //                 console.log(data);
+    //                 setHashtags(data.response);
+    //                 return;
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+    // }, [responses]);
 
     // useEffect(() => {
     //     fetch("https://server.sidd065.repl.co/backend")
@@ -229,6 +223,7 @@ const page = () => {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
+                        gender: localStorage.getItem('gender'),
                         mask: dataURL,
                         image: imgURL,
                         prompt: outfitPrompt,
@@ -561,7 +556,8 @@ const page = () => {
                                             height: "128px",
                                         }}
                                     />
-                                    <p className="font-semibold text-lg tracking-tight">
+                                    <p className="font-semibold text-lg tracking-tight" onClick={() => {navigator.clipboard.writeText(response)}}
+>
                                         {response}
                                     </p>
                                 </div>

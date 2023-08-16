@@ -77,6 +77,7 @@ export default function Home(props: any) {
         router.push("/canvas");
     };
     useEffect(() => {
+        //localStorage.removeItem('image');
         fetch("https://server.sidd065.repl.co/backend")
             .then((res) => res.json())
             .then((data) => {
@@ -112,7 +113,7 @@ export default function Home(props: any) {
     };
 
     return (
-        <>
+        <><title>Attire AI</title>
             <motion.section
                 variants={fadeIn("up", 0.3)}
                 initial="hidden"
@@ -131,7 +132,7 @@ export default function Home(props: any) {
                     <h1 className="text-black md:text-[min(10vw, 100px)] ">
                         Empowering Your
                     </h1>{" "}
-                    <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-600 via-yellow-500">
+                    <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-orange-500 via-yellow-500">
                         Unique Fashion Story
                     </h1>
                 </motion.div>

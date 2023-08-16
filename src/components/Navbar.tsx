@@ -26,24 +26,24 @@ const Navbar = (props: Props) => {
         }
     };
     return (
-        <nav className="w-full h-20 bg-black/5 flex flex-row justify-between items-center p-4 md:px-6 ">
+        <nav className="w-full h-20 bg-black/5 flex flex-row justify-between items-center p-3 md:px-6 ">
             {/* heading */}
             <Link href="/" className="flex flex-row justify-start items-center">
                 {/* logo */}
-                {/* <div className="h-10 w-10 bg-inherit rounded-full p-2 ">
+                {<div className="h-10 w-15 bg-inherit rounded-full">
                     <Image
-                        src="/vercel.svg"
+                        src="/logo.png"
                         alt="logo"
-                        width={60}
-                        height={60}
+                        width={228}
+                        height={50}
                     />
-                </div> */}
-                <h1 className="text-3xl md:text-4xl fort-bold text-blue-700 tracking-wide">
+                </div>}
+                {/*<h1 className="text-3xl md:text-4xl fort-bold text-blue-700 tracking-wide">
                     Flip
                     <span className="font-extrabold text-yellow-500 outline-2 outline-black">
                         Bot
                     </span>
-                </h1>
+                </h1>*/}
             </Link>
 
             {/* login */}
@@ -77,7 +77,7 @@ const Navbar = (props: Props) => {
                 <img
                     alt="..."
                     className="w-12 rounded-full align-middle border-none shadow-lg"
-                    src={`https://avatars.dicebear.com/api/initials/Archit Rathod.svg`}
+                    src={`https://avatars.dicebear.com/api/initials/User 1.svg`}
                 />
 
                 {/* <SignedOut>
