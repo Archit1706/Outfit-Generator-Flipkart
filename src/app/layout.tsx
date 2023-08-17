@@ -15,25 +15,24 @@ const ubuntu = Ubuntu({
     style: "normal",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "AttireAI - Conversational Fashion Outfit Generator",
     description:
         "Revolutionizing fashion discovery through Gen AI-powered outfit recommendations.",
-    author: "Your Name",
+    authors: [
+        { name: "Siddharth Nachane", url: "https://replit.com/@sidd065" },
+        { name: "Archit Rathod", url: "http://architrathod.codes/" },
+    ],
+    applicationName: "AttireAI",
     keywords:
         "fashion outfit generator, Gen AI, personalized fashion, trends, outfit recommendations",
-    image: "https://attire-ai.vercel.app/logo2.png/",
-    url: "https://attire-ai.vercel.app/",
-    type: "website",
-    siteName: "AttireAI",
-    locale: "en_US",
-    og: {
+    openGraph: {
         title: "AttireAI - Conversational Fashion Outfit Generator",
         description:
             "Revolutionizing fashion discovery through Gen AI-powered outfit recommendations.",
         type: "website",
         url: "https://attire-ai.vercel.app/",
-        image: "https://attire-ai.vercel.app/logo2.png/",
+        images: "https://attire-ai.vercel.app/logo2.png/",
         siteName: "AttireAI",
     },
 };
