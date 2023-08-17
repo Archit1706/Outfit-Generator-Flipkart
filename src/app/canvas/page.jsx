@@ -165,49 +165,56 @@ const page = () => {
                 .then((res) => res.json())
                 .then((data) => {
                     console.log(data);
-                    setLLMResponse(data.response);
                     setLLMImages([
                         loadingGif,
                         loadingGif,
                         loadingGif,
                         loadingGif,
                     ]);
-                    for (
-                        let i = 0;
-                        i < Math.min(4, data.response.length);
-                        i++
-                    ) {
-                        fetch(
-                            `${localStorage.getItem(
-                                "ngrok"
-                            )}/api/sdapi/txt2img`,
-                            {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    gender: localStorage.getItem("gender"),
-                                    prompt: data.response[i],
-                                    keywords: data.keywords,
-                                }),
-                            }
-                        )
-                            .then((res) => res.json())
-                            .then((data) => {
-                                console.log(data);
-                                // setResponses((responses) => [
-                                //     ...responses,
-                                //     data.response[0],
-                                // ]);
-                                llmImages[i] = data.response[0];
-                                setLLMImages(llmImages);
-                                update(Math.random());
-                                return data;
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
+                    if (data.response.isArray){ //Internet search response
+                        setLLMResponse(data.response);
+                        for (
+                            let i = 0;
+                            i < data.response.length;
+                            i++
+                        ) {
+                            fetch(
+                                `${localStorage.getItem(
+                                    "ngrok"
+                                )}/api/sdapi/txt2img`,
+                                {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        gender: localStorage.getItem("gender"),
+                                        prompt: data.response[i],
+                                        keywords: data.keywords,
+                                    }),
+                                }
+                            )
+                                .then((res) => res.json())
+                                .then((data) => {
+                                    console.log(data);
+                                    llmImages[i] = data.response[0];
+                                    setLLMImages(llmImages);
+                                    update(Math.random());
+                                    return data;
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        }}
+                    else{ //Recommendation system response
+                        const names=[];
+                        const images=[];
+                        for(const key in data.response){
+                            names.push(key);
+                            images.push(data.response[key]);
+                        }
+                        setLLMResponse(names);
+                        setLLMImages(images);
                     }
                 })
                 .catch((err) => {
