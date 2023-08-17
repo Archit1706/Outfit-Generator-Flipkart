@@ -15,9 +15,27 @@ const ubuntu = Ubuntu({
     style: "normal",
 });
 
-export const metadata: Metadata = {
-    title: "Outfit Generator Bot",
-    description: "It is a bot that generates outfits for you.",
+export const metadata = {
+    title: "AttireAI - Conversational Fashion Outfit Generator",
+    description:
+        "Revolutionizing fashion discovery through Gen AI-powered outfit recommendations.",
+    author: "Your Name",
+    keywords:
+        "fashion outfit generator, Gen AI, personalized fashion, trends, outfit recommendations",
+    image: "https://attire-ai.vercel.app/logo2.png/",
+    url: "https://attire-ai.vercel.app/",
+    type: "website",
+    siteName: "AttireAI",
+    locale: "en_US",
+    og: {
+        title: "AttireAI - Conversational Fashion Outfit Generator",
+        description:
+            "Revolutionizing fashion discovery through Gen AI-powered outfit recommendations.",
+        type: "website",
+        url: "https://attire-ai.vercel.app/",
+        image: "https://attire-ai.vercel.app/logo2.png/",
+        siteName: "AttireAI",
+    },
 };
 
 export default function RootLayout({
