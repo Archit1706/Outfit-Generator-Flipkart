@@ -171,7 +171,7 @@ const page = () => {
                         loadingGif,
                         loadingGif,
                     ]);
-                    if (data.response.isArray){ //Internet search response
+                    if (data.response[0]!==undefined){ //Internet search response
                         setLLMResponse(data.response);
                         for (
                             let i = 0;
