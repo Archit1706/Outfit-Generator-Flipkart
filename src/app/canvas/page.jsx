@@ -73,42 +73,28 @@ const page = () => {
         }
     }, [penSize, imgURL]);
 
-    // useEffect(() => {
-    //     if (responses.length == 0) {
-    //         fetch(`${localStorage.getItem("ngrok")}/api/sdapi/caption`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify({
-    //                 image: imgURL,
-    //             }),
-    //         })
-    //             .then((res) => res.json())
-    //             .then((data) => {
-    //                 console.log(data);
-    //                 setHashtags(data.response);
-    //                 return;
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     }
-    // }, [responses]);
-
-    // useEffect(() => {
-    //     fetch("https://server.sidd065.repl.co/backend")
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             console.log(data);
-    //             setNgrok(data.url);
-    //             // localStorage.setItem("ngrok", data.url);
-    //             return;
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // });
+    useEffect(() => {
+        if (responses.length == 0) {
+            fetch(`${localStorage.getItem("ngrok")}/api/sdapi/caption`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    image: imgURL,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    setHashtags(data.response);
+                    return;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [responses]);
 
     const startDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
@@ -246,9 +232,6 @@ const page = () => {
                     .catch((err) => {
                         console.log(err);
                     });
-                // console.log(dataURL);
-                //send dataURL + imgURL + prompt to backend for next image
-                //await axios.post('https://del.sidd065.repl.co/', { mask: dataUrl, image:imgURL, prompt: outfitPrompt});
             } catch (error) {
                 console.error(error);
             }
@@ -256,7 +239,6 @@ const page = () => {
     };
 
     const googleSearch = () => {
-        //send outfitPrompt to google search
 
         try {
             fetch(`${localStorage.getItem("ngrok")}/api/sdapi/upscale`, {
@@ -281,8 +263,6 @@ const page = () => {
                 });
 
             console.log(outfitPrompt);
-            //send outfitPrompt to google search
-            //await axios.post('https://del.sidd065.repl.co/', { prompt: outfitPrompt});
         } catch (error) {
             console.error(error);
         }
@@ -295,7 +275,6 @@ const page = () => {
         setImgURL(e.target.src);
         setPreviousResponses(responses);
         setResponses([]);
-        // window.location.reload();
     };
 
     const showPreviousResponses = () => {
@@ -311,7 +290,6 @@ const page = () => {
 
     return (
         <section className="flex justify-center items-center min-h-screen h-auto md:items-start flex-col md:flex-row p-4 gap-4">
-            {/* canvas with bg-image as the user image */}
             <div className="w-[90vw] md:w-1/2 text-center flex flex-col justify-center items-center gap-2">
                 <button
                     className="group border-none h-auto bg-white/60 hover:bg-white/70

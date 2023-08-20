@@ -48,13 +48,11 @@ export default function Home(props: any) {
     };
     const handleChange = (file: any) => {
         setFile(file);
-        // console.log(file.name, file.type, file.size);
         var reader = new FileReader();
         let base64data;
         reader.onloadend = function () {
             base64data = reader.result;
             console.log(base64data);
-            // localStorage.setItem("image", base64data);
             fetch(`${localStorage.getItem("ngrok")}/api/sdapi/resize`, {
                 method: "POST",
                 headers: {
@@ -77,7 +75,6 @@ export default function Home(props: any) {
         router.push("/canvas");
     };
     useEffect(() => {
-        //localStorage.removeItem('image');
         fetch("https://server.sidd065.repl.co/backend")
             .then((res) => res.json())
             .then((data) => {
